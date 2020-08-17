@@ -1,8 +1,3 @@
-# Create Infra
-
-RG + VNet + AKS (Kubenet)
-
-```
 #!/bin/bash
 RESOURCE_GROUP="containersOH"
 LOCATION="australiaeast"
@@ -59,14 +54,3 @@ ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --que
 
 # Create role assignment
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
-```
-
-# Create Secret for DB 
-
-kubectl create secret generic sql \
-    --from-literal=SQL_USER=<> \
-    --from-literal=SQL_PASSWORD=<> \
-    --from-literal=SQL_SERVER=<>.database.windows.net \
-    --from-literal=SQL_DBNAME=<>
-
-# Apply Deployments & Services
