@@ -42,7 +42,6 @@ az aks create \
 	--vnet-subnet-id $SUBNET_ID \
 	--service-principal $CLIENT_ID \
 	--client-secret $SP_PASSWD \
-	--enable-managed-identity \
 	--node-count 2 \
 	--enable-addons monitoring
 
@@ -54,3 +53,6 @@ ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --que
 
 # Create role assignment
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
+
+# Another way
+az aks update -g $RESOURCE_GROUP -n $AKS_CLUSTER_NAME --attach-acr $ACR_NAME
