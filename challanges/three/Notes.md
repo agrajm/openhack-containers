@@ -9,14 +9,15 @@ az ad group create --display-name myAKSAdminGroup --mail-nickname myAKSAdminGrou
 
 Update the AKS cluster to enable AAD integration and deploy to existing VNet (10.2.0.0/22) and create new subnet for AKS ( 10.2.1.0/24 )
 
-RESOURCE_GROUP="teamResources"
 
+```
+RESOURCE_GROUP="teamResources"
+LOCATION="eastasia"
 VNET_ID=$(az network vnet show --resource-group $RESOURCE_GROUP --name vnet --query id -o tsv)
 echo "Vnet ID: $VNET_ID"
 SUBNET_ID=$(az network vnet subnet show --resource-group $RESOURCE_GROUP --vnet-name vnet --name aks-subnet --query id -o tsv)
 echo "Subnet ID: $SUBNET_ID"
 
-```
 az aks create \
 	--resource-group $RESOURCE_GROUP \
 	--name $AKS_CLUSTER_NAME \

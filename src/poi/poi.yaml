@@ -36,6 +36,13 @@ spec:
         envFrom:
           - secretRef:
               name: sql
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-kv-system-msi"
 
 ---
 apiVersion: v1
