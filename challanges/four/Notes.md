@@ -61,5 +61,35 @@ TENANT_ID=$(az account show --query tenantId -o tsv)
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
 kaf secretprovider.yaml
+kaf poi.yaml
+```
+
+# Ingress
+
+Install NGINX Ingress Controller using Helm
 
 ```
+# Create a namespace for your ingress resources
+kubectl create namespace ingress-nginx
+
+# Add the official stable repository
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+
+# Use Helm to deploy an NGINX ingress controller
+helm install nginx-ingress stable/nginx-ingress \
+    --namespace ingress-nginx \
+    --set controller.replicaCount=2 \
+    --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
+    --set controller.metrics.enabled=true \
+    --set controller.config.hsts=false \
+    --set controller.config.redirect-ssl=false
+```
+
+Install Ingress Resources for both web and api namespaces
+
+```
+kaf api-ingress.yaml
+kaf web-ingress.yaml
+```
+

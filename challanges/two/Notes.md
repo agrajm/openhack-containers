@@ -53,7 +53,7 @@ az aks create \
 
 
 # Get the ACR registry resource id
-ACR_NAME="registrymad0964"
+ACR_NAME="registryrjb1641"
 ACR_RESOURCE_GROUP="teamResources"
 ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --query "id" --output tsv)
 
@@ -61,12 +61,33 @@ ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --que
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
 
-# Create Secret for DB 
+# Apply Deployments & Services
+
+Build Docker Files for all microservices
+
+```
+az acr build -t containersoh/poi:v1 -r $ACR_NAME .
+az acr build -t containersoh/trips:v1 -r $ACR_NAME .
+az acr build -t containersoh/userjava:v1 -r $ACR_NAME .
+az acr build -t containersoh/userprofile:v1 -r $ACR_NAME .
+az acr build -t containersoh/tripviewer:v1 -r $ACR_NAME .
+```
+
+Create namespaces api & web and deploy accordingly
+```
+k create ns api
+k create ns web
+
+```
+
+# Create Secret for DB in API namespace
+
+```
+kubectl config set-context --current --namespace=api
 
 kubectl create secret generic sql \
     --from-literal=SQL_USER=<> \
     --from-literal=SQL_PASSWORD=<> \
     --from-literal=SQL_SERVER=<>.database.windows.net \
     --from-literal=SQL_DBNAME=<>
-
-# Apply Deployments & Services
+```

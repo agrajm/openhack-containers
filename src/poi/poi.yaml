@@ -16,7 +16,7 @@ spec:
         app: poi
     spec:
       containers:
-      - image: "registrymad0964.azurecr.io/containersoh/poi:v1"
+      - image: "registryrjb1641.azurecr.io/containersoh/poi:v1"
         imagePullPolicy: Always
         name: poi
         ports:
@@ -32,18 +32,11 @@ spec:
           - name: WEB_PORT
             value: '8080'
           - name: ASPNETCORE_ENVIRONMENT
-            value: 'Production'
+            value: 'Development'
         envFrom:
           - secretRef:
               name: sql
-      volumes:
-      - name: secrets-store-inline
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "azure-kv-system-msi"
-
+              
 ---
 apiVersion: v1
 kind: Service

@@ -16,7 +16,7 @@ spec:
         app: trips
     spec:
       containers:
-      - image: "registrymad0964.azurecr.io/containersoh/trips:v1"
+      - image: "registryrjb1641.azurecr.io/containersoh/trips:v1"
         imagePullPolicy: Always
         name: trips
         ports:

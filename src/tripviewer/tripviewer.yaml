@@ -16,7 +16,7 @@ spec:
         app: tripviewer
     spec:
       containers:
-      - image: "registrymad0964.azurecr.io/containersoh/tripviewer:v1"
+      - image: "registryrjb1641.azurecr.io/containersoh/tripviewer:v1"
         imagePullPolicy: Always
         name: tripviewer
         ports:
@@ -26,10 +26,12 @@ spec:
         env:
           - name: USERPROFILE_API_ENDPOINT
             value: "http://userprofile.api.svc.cluster.local"
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
           - name: TRIPS_API_ENDPOINT
             value: "http://trips.api.svc.cluster.local"
           - name: BING_MAPS_KEY
-            value: ""
+            value: "Au5Hi7ev_DyM3TsTLr1u_zDu8ecVpyHFb9d_F5gaCkTK9GQ8z-ho044xavRecUst"
 ---
 apiVersion: v1
 kind: Service

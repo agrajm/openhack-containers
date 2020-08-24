@@ -1,6 +1,6 @@
 #!/bin/bash
 RESOURCE_GROUP="containersOH"
-LOCATION="australiaeast"
+LOCATION="eastasia"
 AKS_CLUSTER_NAME="aksCluster"
  
 echo "Creating Resource Group"
@@ -47,7 +47,7 @@ az aks create \
 
 
 # Get the ACR registry resource id
-ACR_NAME="registrymad0964"
+ACR_NAME="registryrjb1641"
 ACR_RESOURCE_GROUP="teamResources"
 ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --query "id" --output tsv)
 

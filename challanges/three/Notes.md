@@ -11,12 +11,23 @@ Update the AKS cluster to enable AAD integration and deploy to existing VNet (10
 
 
 ```
-RESOURCE_GROUP="teamResources"
+RESOURCE_GROUP="teamResources-OpenHackTeam11DryRun"
 LOCATION="eastasia"
+AKS_CLUSTER_NAME="aksCluster"
 VNET_ID=$(az network vnet show --resource-group $RESOURCE_GROUP --name vnet --query id -o tsv)
 echo "Vnet ID: $VNET_ID"
+# Create aks-subnet
+az network vnet subnet create \
+  --address-prefixes 10.2.1.0/24 \
+  --name aks-subnet \
+  --resource-group $RESOURCE_GROUP \
+  --vnet-name vnet
 SUBNET_ID=$(az network vnet subnet show --resource-group $RESOURCE_GROUP --vnet-name vnet --name aks-subnet --query id -o tsv)
 echo "Subnet ID: $SUBNET_ID"
+
+# Create AKS-Admin AD group
+AKS_ADMIN_GROUP_ID=$(az ad group create --display-name aksadmingroup --mail-nickname aksadmingroup --query objectId -o tsv)
+echo $AKS_ADMIN_GROUP_ID
 
 az aks create \
 	--resource-group $RESOURCE_GROUP \
@@ -29,9 +40,10 @@ az aks create \
 	--docker-bridge-address 172.17.0.1/16 \
 	--vnet-subnet-id $SUBNET_ID \
 	--enable-aad \
-  --aad-admin-group-object-ids b74f41ac-ccd0-4e07-b279-27516aea993f \
+  --aad-admin-group-object-ids $AKS_ADMIN_GROUP_ID \
 	--node-count 2 \
-	--enable-addons monitoring
+	--enable-addons monitoring \
+  --enable-managed-identity
 ```
 
 ```aad-admin-group-object-ids <id>``` -- Required -- Comma seperated list of aad group object IDs that will be set as cluster admin.
@@ -39,7 +51,25 @@ az aks create \
 
 ```aad-tenant-id <id>``` -- Optional --  The ID of an Azure Active Directory tenant.
 
+Attach ACR
 
+```
+ACR_NAME="registryrjb1641"
+az aks update -g $RESOURCE_GROUP -n $AKS_CLUSTER_NAME --attach-acr $ACR_NAME
+```
+
+Deploy Workloads
+
+```
+k config set-context --current --namespace=api
+k create secret generic sql ... 
+kaf poi.yaml
+kaf trips.yaml
+kaf user-java.yaml
+kaf userjava.yaml
+k config set-context --current --namespace=web
+kaf tripviewer.yaml
+```
 
 # API Server Authorized IP Ranges
 
