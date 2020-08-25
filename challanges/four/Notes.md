@@ -73,10 +73,11 @@ Install NGINX Ingress Controller using Helm
 kubectl create namespace ingress-nginx
 
 # Add the official stable repository
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
 
 # Use Helm to deploy an NGINX ingress controller
-helm install nginx-ingress stable/nginx-ingress \
+helm install nginx-ingress nginx-stable/nginx-ingress \
     --namespace ingress-nginx \
     --set controller.replicaCount=2 \
     --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \

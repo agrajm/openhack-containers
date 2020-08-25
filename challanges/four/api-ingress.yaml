@@ -7,7 +7,8 @@ metadata:
   namespace: api
 spec:
   rules:
-  - http:
+  - host: test.agraj.com
+    http:
       paths:
       - backend:
           serviceName: poi
